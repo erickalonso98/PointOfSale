@@ -18,6 +18,7 @@ class Product extends Model
         'purchase_price',
         'sale_price',
         'stock',
+        'minimum_stock',
         'photo',
         'status',
         'brand',
@@ -31,5 +32,9 @@ class Product extends Model
 
     public function supplier(){
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function saleDetails(){
+        return $this->hasMany(SaleDetail::class);
     }
 }

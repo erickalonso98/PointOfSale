@@ -29,4 +29,12 @@ class Sale extends Model
     public function box(){
         return $this->belongsTo(Box::class);
     }
+
+    public function paymets(){
+        return $this->hasMany(Paymets::class);
+    }
+
+    public function salesDetails(){
+        return $this->hasMany(SaleDetail::class);
+    }
 }

@@ -8,4 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class SaleDetail extends Model
 {
     use HasFactory;
+
+    protected $table = 'sales_details';
+
+    protected $fillable = [
+        'sale_id',
+        'product_id',
+        'unit_price'
+    ];
+
+    public function Sale(){
+        return $this->belongsTo(Sale::class);
+    }
+
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
 }
