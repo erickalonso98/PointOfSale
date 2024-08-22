@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('paymets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('lastname');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('photo')->nullable();
-            $table->rememberToken();
+            $table->unsignedBigInteger('sale_id');
+            $table->string('payments_method');
+            $table->decimal('paymets_amout',10,2);
             $table->dateTime('created_at')->useCurrent();
             $table->dateTime('updated_at')->nullable();
+
+            $table->foreign('sale_id')->references('id')->on('sales');
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('paymets');
     }
 };
