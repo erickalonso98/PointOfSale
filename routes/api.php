@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\BoxController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +25,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
+//* Rutas de Usuarios
+
+//* Rutas de Productos
+
+//*Rutas de ventas de productos
+
 //* Rutas de categorias de productos
 Route::get('/categories',[CategoryController::class,"index"]);
 Route::get('/categorie/{id}',[CategoryController::class,"show"]);
@@ -35,3 +44,24 @@ Route::get('/provider/{id}',[SupplierController::class,"show"]);
 Route::post('/create-provider',[SupplierController::class,"store"]);
 Route::put('/updated-provider/{id}',[SupplierController::class,"update"]);
 Route::delete('/remove-provider/{id}',[SupplierController::class,"destroy"]);
+
+//* Rutas de compañia de punto de venta
+Route::get('/companies/',[CompanyController::class,"index"]);
+Route::get('/company/{id}',[CompanyController::class,"show"]);
+Route::post('/create-company',[CompanyController::class,"store"]);
+Route::put('/updated-company/{id}',[CompanyController::class,"update"]);
+Route::delete('/remove-company/{id}',[CompanyController::class,"destroy"]);
+
+//* Rutas de Clientes
+Route::get('/clients',[ClientController::class,"index"]);
+Route::get('/client/{id}',[ClientController::class,"show"]);
+Route::post('/create-client/',[ClientController::class,"store"]);
+Route::put('/updated-client/{id}',[ClientController::class,"update"]);
+Route::delete('/deleted-client/{id}'.[ClientController::class,"destroy"]);
+
+//* Ruta de Inicio de Caja de venta
+Route::get('/boxes/',[BoxController::class,"index"]);
+Route::get('/box/{id}',[BoxController::class,"show"]);
+Route::post('/create-box',[BoxController::class,"store"]);
+Route::put('/updated-box/{id}',[BoxController::class,"update"]);
+Route::delete('/deleted-box/{id}',[BoxController::class,"destroy"]);
