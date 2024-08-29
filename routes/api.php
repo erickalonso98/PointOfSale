@@ -4,6 +4,7 @@ use App\Http\Controllers\BoxController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //* Rutas de Usuarios
 
 //* Rutas de Productos
+Route::get('/products',[ProductController::class,"index"]);
+Route::get('/product/{id}',[ProductController::class,"show"]);
+Route::post('/create-product/',[ProductController::class,"store"]);
+Route::put('/updated-product/{id}',[ProductController::class,"update"]);
+Route::delete('/removed-product/{id}',[ProductController::class,"destroy"]);
 
 //*Rutas de ventas de productos
 
@@ -57,7 +63,7 @@ Route::get('/clients',[ClientController::class,"index"]);
 Route::get('/client/{id}',[ClientController::class,"show"]);
 Route::post('/create-client/',[ClientController::class,"store"]);
 Route::put('/updated-client/{id}',[ClientController::class,"update"]);
-Route::delete('/deleted-client/{id}'.[ClientController::class,"destroy"]);
+Route::delete('/deleted-client/{id}',[ClientController::class,"destroy"]);
 
 //* Ruta de Inicio de Caja de venta
 Route::get('/boxes/',[BoxController::class,"index"]);
