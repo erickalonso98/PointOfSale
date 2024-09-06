@@ -5,7 +5,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,13 +22,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-*/
+Route::post('/user/login/',[UserController::class,"login"]);
+
+Route::middleware('api.auth')->group(function(){
 
 //* Rutas de Usuarios
+Route::get('/users/',[UserController::class,"index"]);
+Route::get('/user/{id}',[UserController::class,"show"]);
+Route::post('/user/register/',[UserController::class,"register"]);
+Route::put('/user/update-user/{id}',[UserController::class,"update"]);
+Route::delete('/user/removed-user/{id}',[UserController::class,"destroy"]);
+
+//* Rutas de roles de usuarios
+Route::get('/roles/',[RoleController::class,"index"]);
+Route::get('/role/{id}',[RoleController::class,"show"]);
+Route::post('/roles/create-role/',[RoleController::class,"store"]);
+//* Rutas de permisos de usuarios
 
 //* Rutas de Productos
 Route::get('/products',[ProductController::class,"index"]);
@@ -71,3 +82,5 @@ Route::get('/box/{id}',[BoxController::class,"show"]);
 Route::post('/create-box',[BoxController::class,"store"]);
 Route::put('/updated-box/{id}',[BoxController::class,"update"]);
 Route::delete('/deleted-box/{id}',[BoxController::class,"destroy"]);
+
+});
