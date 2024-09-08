@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 class RoleController extends Controller
 {
@@ -86,14 +87,59 @@ class RoleController extends Controller
         }else{
 
             $role = Role::create(["name" => $request->input("name")]);
+            $user = User::find(3);
+            $user->assignRole($role);
 
             $data = array(
                 "status"  => "success",
                 "code"    => 201,
                 "role"    => $role,
+                "user"    => $user,
                 "message" => "Rol creado con exito!!"
             );
         }
+
+        } catch (\Exception $e) {
+            $data = array(
+                "status"  => "error",
+                "code"    => 500,
+                "message" => "Error en el servidor"
+            );
+        }
+
+        return response()->json($data,$data["code"]);
+    }
+
+    public function destroy($id){
+        try {
+            if($id == null){
+                $data = array(
+                    "status"  => "error",
+                    "code"    => 404,
+                    "message" => "Introduzca el id a buscar"
+                );
+            }
+
+            $role = Role::find($id);
+
+            if(is_object($role) && !empty($role)){
+
+                $role->delete();
+
+                $data = array(
+                    "status"  => "success",
+                    "code"    => 200,
+                    "role"    => $role,
+                    "message" => "Producto eliminado con exito!!"
+                );
+                
+            }else{
+                $data = array(
+                    "status"  => "error",
+                    "code"  => 404,
+                    "message" => "No se encuentra el usuario"
+                );
+            }
 
         } catch (\Exception $e) {
             $data = array(

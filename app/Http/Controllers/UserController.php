@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Spatie\Permission\Models\Role;
 use App\Models\User;
+
+
 
 class UserController extends Controller
 {
@@ -157,7 +160,71 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id){
-        
+        try {
+            if($id == null){
+                $data = array(
+                    "status"  => "error",
+                    "code"    => 404,
+                    "message" => "Introduzca el id a buscar"
+                );
+            }
+
+            $user = JWTAuth::authenticate($request->bearerToken());
+
+            if(!$user){
+                $data = [
+                    "status"  => "error",
+                    "code"    => 401,
+                    "message" => "Token invalido"
+                ];
+            }
+
+            $validator = Validator::make($request->all(),[
+                "name"              => "required|string|max:255",
+                "lastname"          => "required|string|max:255",
+                "email"             => "required|email|unique:users",
+                "email_verified_at" => "nullable",
+                "password"          => "required|min:7|confirmed",
+                "photo"             => "nullable"
+            ],[
+                "name.required"     => "El nombre del usuario es requerido",
+                "lastname.required" => "Los apellidos del usuario son requeridos",
+                "email.required"    => "El correo del usuario es requerido",
+                "password.required" => "La contraseña del usuario es requerido"
+            ]);
+    
+            if($validator->fails()){
+                $data = [
+                    "status"  => "error",
+                    "code"    => 400,
+                    "message" => $validator->errors()
+                ];
+            }else{
+                $user->name = $request->input("name");
+                $user->lastname = $request->input("lastname");
+                $user->email = $request->input("email");
+                $pwd = Hash::make($request->input("password"));
+                $user->password = $pwd;
+    
+                
+                $user->save();
+    
+                $data = [
+                    "status"  => "success",
+                    "code"    => 200,
+                    "user"    => $user,
+                    "message" => "Usuario actualizado con exito!!", 
+                ];
+            }
+        } catch (\Exception $e) {
+            $data = array(
+                "status"  => "error",
+                "code"    => 404,
+                "message" => "Error en el servidor"
+            );
+        }
+
+        return response()->json($data,$data["code"]);
     }
 
     public function destroy($id){
