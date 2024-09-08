@@ -73,7 +73,7 @@ class RoleController extends Controller
     try {
 
         $validator = Validator::make($request->all(),[
-            "name" => "required"
+            "name" => "required|string|max:255"
         ],[
             "name.required" => "El nombre del rol es requerido"
         ]);
@@ -87,16 +87,29 @@ class RoleController extends Controller
         }else{
 
             $role = Role::create(["name" => $request->input("name")]);
-            $user = User::find(3);
-            $user->assignRole($role);
+            $userId = $request->input("id");
+            $user = User::find($userId);
 
-            $data = array(
-                "status"  => "success",
-                "code"    => 201,
-                "role"    => $role,
-                "user"    => $user,
-                "message" => "Rol creado con exito!!"
-            );
+            if($user){
+
+                $user->assignRole($role);
+
+                $data = array(
+                    "status"  => "success",
+                    "code"    => 201,
+                    "role"    => $role,
+                    "user"    => $user,
+                    "message" => "Rol creado con exito!!"
+                );
+
+            }else{
+                $data = [
+                    "status" => "error",
+                    "code" => 404,
+                    "message" => "Usuario no encontrado."
+                ];
+            }
+            
         }
 
         } catch (\Exception $e) {
@@ -130,7 +143,7 @@ class RoleController extends Controller
                     "status"  => "success",
                     "code"    => 200,
                     "role"    => $role,
-                    "message" => "Producto eliminado con exito!!"
+                    "message" => "Rol eliminado con exito!!"
                 );
                 
             }else{

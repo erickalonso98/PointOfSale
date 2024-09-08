@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Spatie\Permission\Models\Role;
 use App\Models\User;
 
 
@@ -115,8 +114,8 @@ class UserController extends Controller
                     "status"  => "success",
                     "code"    => 201,
                     "user"    => $user,
-                    "token"   => $token,
-                    "message" => "Usuario Creado con exito!!"
+                    "message" => "Usuario Creado con exito!!",
+                    "token"   => $token
                 );
             }
             

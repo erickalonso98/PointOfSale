@@ -37,6 +37,7 @@ Route::delete('/user/removed-user/{id}',[UserController::class,"destroy"]);
 Route::get('/roles/',[RoleController::class,"index"]);
 Route::get('/role/{id}',[RoleController::class,"show"]);
 Route::post('/roles/create-role/',[RoleController::class,"store"]);
+Route::put('/roles/updated-role/{id}',[RoleController::class,"update"]);
 Route::delete('/role/removed-role/{id}',[RoleController::class,"destroy"]);
 //* Rutas de permisos de usuarios
 
