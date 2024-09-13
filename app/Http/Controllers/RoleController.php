@@ -11,9 +11,9 @@ class RoleController extends Controller
 {
     public function index(){
 
-        $role = Role::all();
+        $roles = Role::all();
 
-        if($role->isEmpty()){
+        if($roles->isEmpty()){
             $data = array(
                 "status"  => "error",
                 "code"    => 404,
@@ -23,7 +23,7 @@ class RoleController extends Controller
             $data = array(
                 "status" => "success",
                 "code"   => 200,
-                "users"  => $role
+                "roles"  => $roles
             );
         }
 
@@ -123,6 +123,63 @@ class RoleController extends Controller
         return response()->json($data,$data["code"]);
     }
 
+    public function update(Request $request, $id){
+        try {
+            if($id == null){
+                $data = array(
+                    "status"  => "error",
+                    "code"    => 404,
+                    "message" => "Introduzca el id a buscar"
+                );
+            }
+
+            $validator = Validator::make($request->all(),[
+                "name" => "required|string|max:255"
+            ],[
+                "name.required" => "El nombre del rol es requerido"
+            ]);
+            
+            if($validator->fails()){
+                $data = array(
+                    "status"  => "error",
+                    "code"    => 404,
+                    "message" => $validator->errors()
+                );
+            }else{
+
+                $role = Role::where(['id' => $id])->first();
+
+                if(is_object($role) && !empty($role)){
+
+                    $role->update($request->all());
+
+                    $data = array(
+                        "status"  => "success",
+                        "code"    => 200,
+                        "role"    => $role,
+                        "message" => "Rol actualizado con exito!!"
+                    );
+
+                }else{
+                    $data = array(
+                        "status"  => "error",
+                        "code"    => 404,
+                        "message" => "No se actualizo el rol"
+                    );
+                }
+            }
+            
+        } catch (\Exception $e) {
+            $data = array(
+                "status"  => "error",
+                "code"    => 500,
+                "message" => "Error en el servidor ".$e->getMessage()
+            );
+        }
+
+        return response()->json($data,$data["code"]);
+    }
+
     public function destroy($id){
         try {
             if($id == null){
@@ -158,7 +215,7 @@ class RoleController extends Controller
             $data = array(
                 "status"  => "error",
                 "code"    => 500,
-                "message" => "Error en el servidor"
+                "message" => "Error en el servidor ".$e->getMessage()
             );
         }
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\BoxController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SupplierController;
@@ -39,7 +40,14 @@ Route::get('/role/{id}',[RoleController::class,"show"]);
 Route::post('/roles/create-role/',[RoleController::class,"store"]);
 Route::put('/roles/updated-role/{id}',[RoleController::class,"update"]);
 Route::delete('/role/removed-role/{id}',[RoleController::class,"destroy"]);
+
 //* Rutas de permisos de usuarios
+Route::get('/permissions/',[PermissionController::class,"index"]);
+Route::get('/permission/{id}',[PermissionController::class,"show"]);
+Route::post('/permissions/create-permission/',[PermissionController::class,"store"]);
+Route::put('/permissions/updated-permission/{id}',[PermissionController::class,"update"]);
+Route::delete('/permissions/removed-permission/{id}',[PermissionController::class,"destroy"]);
+Route::post('/permissions/assignpermissiontorole/',[PermissionController::class,"assignPermissionToRole"]);
 
 //* Rutas de Productos
 Route::get('/products',[ProductController::class,"index"]);
