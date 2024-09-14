@@ -104,8 +104,41 @@ class PermissionController extends Controller
         return response()->json($data,$data["code"]);
     }
 
-    public function assignPermissionToRole(){
-        
+    public function assignPermissionToRole(Request $request){
+        try {
+            
+            $roleId = $request->input("role_id");
+            $permissionId = $request->input("permission_id");
+
+            $role = Role::find($roleId);
+            $permission = Permission::find($permissionId);
+
+            if($role && $permission){
+                $permission->assignRole($role);
+
+                $data = array(
+                    "status"     => "success",
+                    "code"       => 200,
+                    "role"       => $role,
+                    "permission" => $permission,
+                    "message"    => "Permiso asignado al rol con exito!!"
+                );
+            }else{
+                $data = array(
+                    "status"  => "error",
+                    "code"    => 404,
+                    "message" => "No se encuentra el rol para asignar permiso"
+                );
+            }
+        } catch (\Exception $e) {
+            $data = array(
+                "status"  => "error",
+                "code"    => 500,
+                "message" => "Error en el servidor"
+            );
+        }
+
+        return response()->json($data,$data["code"]);
     }
 
     public function update(Request $request, $id){
