@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -57,6 +58,11 @@ Route::put('/updated-product/{id}',[ProductController::class,"update"]);
 Route::delete('/removed-product/{id}',[ProductController::class,"destroy"]);
 
 //*Rutas de ventas de productos
+Route::get('/sales/',[SaleController::class,"index"]);
+Route::get('/sale/{id}',[SaleController::class,"show"]);
+Route::post('sale/create-new-sale/',[SaleController::class,"store"]);
+Route::put('sale/updated-sales/{id}',[SaleController::class,"update"]);
+Route::delete('sale/removed-sale/{id}',[SaleController::class,"destroy"]);
 
 //* Rutas de categorias de productos
 Route::get('/categories',[CategoryController::class,"index"]);

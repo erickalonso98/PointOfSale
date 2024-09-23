@@ -164,19 +164,40 @@ class ProductController extends Controller
                 );
             }else{
 
-                Product::where('id',$id)->first()->update($request->all());
+               $product = Product::where('id',$id)->first();
 
-                $data = array(
-                    "status"  => "success",
-                    "code"    => 200,
-                    "message" => "Producto Actualizado con exito!!"
-               );
+               if(!$product){
+                    $data = array(
+                        "status"  => "error",
+                        "code"    => 404,
+                        "message" => "Producto no encontrado"
+                    );
+               }
+
+               if(is_object($product) && !empty($product) && $product){
+
+                    $product->update($request->all());
+
+                    $data = array(
+                        "status"  => "success",
+                        "code"    => 200,
+                        "product" => $product,
+                        "message" => "Producto Actualizado con exito!!"
+                   );
+                   
+               }else{
+                    $data = array(
+                        "status"  => "error",
+                        "code"    => 404,
+                        "message" => "No se encuentra el producto o no se actualizo correctamente"
+                    );
+               }  
             }
 
         } catch (\Exception $e) {
             $data = array(
                 "status"  => "error",
-                "code"    => 404,
+                "code"    => 500,
                 "message" => "Error en el servidor ".$e->getMessage()
             );
         }

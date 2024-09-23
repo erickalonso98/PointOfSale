@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -13,13 +14,11 @@ use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Models\User;
 
-
-
 class UserController extends Controller
 {
     public function index(){
 
-        $users = User::all();
+        $users = User::with("roles")->get();
 
         if($users->isEmpty()){
             $data = array(
@@ -130,29 +129,29 @@ class UserController extends Controller
     }
 
     public function login(LoginRequest $request){
+
         try {
+
             $credentials = $request->only(["email","password"]);
 
             if(!$token = JWTAuth::attempt($credentials)){
-                $data = array(
-                    "status"  => "error",
-                    "code"    => 400,
-                    "message" => "Usuario o contraseña incorrectos"
-                );
+                return response()->json([
+                    "status" => "error",
+                    "message" => "Error de Autenticacion"
+                ],400);
             }
 
+            $identity = Auth::user();
+
             $data = array(
-                "status"  => "success",
-                "code"    => 200,
-                "token"   => $token
+                "status"   => "success",
+                "code"     => 200,
+                "identity" => $identity,
+                "token"    => $token
             );
 
         } catch (JWTException $e) {
-            $data = array(
-                "status"  => "error",
-                "code"    => 404,
-                "message" => "Error en el servidor"
-            );
+            return response()->json(["status" => "error","message" => "Error en el servidor ".$e->getMessage()],500);
         }
 
         return response()->json($data,$data["code"]);

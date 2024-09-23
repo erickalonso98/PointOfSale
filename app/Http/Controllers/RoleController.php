@@ -87,7 +87,7 @@ class RoleController extends Controller
         }else{
 
             $role = Role::create(["name" => $request->input("name")]);
-            $userId = $request->input("id");
+            $userId = $request->input("user_id");
             $user = User::find($userId);
 
             if($user){
