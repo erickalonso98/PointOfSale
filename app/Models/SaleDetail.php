@@ -14,7 +14,8 @@ class SaleDetail extends Model
     protected $fillable = [
         'sale_id',
         'product_id',
-        'unit_price'
+        'unit_price',
+        'quantity'
     ];
 
     public function Sale(){

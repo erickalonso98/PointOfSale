@@ -154,4 +154,18 @@ class CategoryController extends Controller
 
         return response()->json($data,$data["code"]);
     }
+
+    public function sumCategory(){
+        
+        $total = Category::count();
+        
+        $data = array(
+            "status"  => "success",
+            "code"    => 200,
+            "message" => "Total de categorias",
+            "total"   => $total
+        );
+        
+        return response()->json($data,$data["code"]);
+    }
 }

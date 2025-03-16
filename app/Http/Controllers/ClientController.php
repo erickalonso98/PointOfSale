@@ -194,4 +194,17 @@ class ClientController extends Controller
         }
         return response()->json($data,$data['code']);
     }
+
+    public function countClient(){
+        $clients = Client::count();
+
+        $data = array(
+            "status"  => "success",
+            "code"    => 200,
+            "clients" => $clients,
+            "message" => "Clientes contados con exito!!"
+        );
+
+        return response()->json($data,$data['code']);
+    }
 }

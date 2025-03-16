@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Sale;
+use App\Models\Product;
+use App\Models\SaleDetail;
 
 class SaleController extends Controller
 {
@@ -90,7 +92,18 @@ class SaleController extends Controller
                 ];
             }else{
 
-                $sale = Sale::create($request->all());
+                $total = 0;
+
+                $sale = Sale::create([
+                    "user_id"   => auth()->id(),
+                    "client_id" => $request->input('client_id'),
+                    "box_id"    => $request->input('box_id'),
+                    "total"     => 0
+                ]);
+
+                foreach($request->input('products') as $item){
+                    $products = Product::where('id',$item['id'])->first();
+                }
 
                 $data = [
                     "status"  => "success",
