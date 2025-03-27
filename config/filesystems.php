@@ -43,6 +43,20 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'user' => [
+            'driver' => 'local',
+            'root' => storage_path('app/user'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+        'product' => [
+            'driver' => 'local',
+            'root' => storage_path('app/product'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
 
         's3' => [
             'driver' => 's3',

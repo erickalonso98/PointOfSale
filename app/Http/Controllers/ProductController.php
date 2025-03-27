@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use App\Models\Product;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
@@ -242,6 +245,52 @@ class ProductController extends Controller
                 "message" => "Error en el servidor"
             );
         }
+        return response()->json($data,$data['code']);
+    }
+
+    public function uploads(Request $request){
+        $image = $request->file('file0');
+
+        $validator = Validator::make($request->all(),[
+            'file0' => 'required|image|mimes:jpg,jpeg,png,gif'
+        ]);
+
+        if(!$image || $validator->fails()){
+            $data = array(
+                "status"  => "error",
+                "code"    => 400,
+                "message" => "Imagen no encontrada"
+            );
+        }else{
+            $image_name = time().$image->getClientOriginalName();
+            Storage::disk('product')->put($image_name,File::get($image));
+
+            $data = array(
+                "status" => "success",
+                "code"   => 200,
+                "image"  => $image_name
+            );
+        }
+
+        return response()->json($data,$data['code']);
+
+    }
+
+    public function getImage($filename){
+        $image = Storage::disk('product')->exists($filename);
+
+        if($image){
+            $file = Storage::disk('product')->get($filename);
+            
+            return new Response($file,200);
+        }else{
+            $data = array(
+                "status"  => "error",
+                "code"    => 404,
+                "message" => "Imagen no existe"
+            );
+        }
+
         return response()->json($data,$data['code']);
     }
 }

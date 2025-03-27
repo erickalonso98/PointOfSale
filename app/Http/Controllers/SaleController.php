@@ -92,19 +92,18 @@ class SaleController extends Controller
                 ];
             }else{
 
-                $total = 0;
+                $sale = Sale::create($request->all());
 
-                $sale = Sale::create([
-                    "user_id"   => auth()->id(),
-                    "client_id" => $request->input('client_id'),
-                    "box_id"    => $request->input('box_id'),
-                    "total"     => 0
-                ]);
-
-                foreach($request->input('products') as $item){
-                    $products = Product::where('id',$item['id'])->first();
+                foreach($request->product_id as $item => $product){
+                    $results[] = array(
+                        "product_id" => $request->product_id[$item],
+                        "unit_price" => $request->unit_price[$item],
+                        "quantity"   => $request->quantity[$item]
+                    );
                 }
 
+                $sale->salesDetails()->createMany($results);
+                   
                 $data = [
                     "status"  => "success",
                     "code"    => 201,

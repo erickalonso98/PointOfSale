@@ -35,6 +35,8 @@ Route::get('/user/{id}',[UserController::class,"show"]);
 Route::post('/user/register/',[UserController::class,"register"]);
 Route::put('/user/update-user/{id}',[UserController::class,"update"]);
 Route::delete('/user/removed-user/{id}',[UserController::class,"destroy"]);
+Route::post('/user/upload/',[UserController::class,"uploads"]);
+Route::get('/user/image/{filename}',[UserController::class,"getImage"]);
 
 //* Rutas de roles de usuarios
 Route::get('/roles/',[RoleController::class,"index"]);
@@ -57,6 +59,8 @@ Route::get('/product/{id}',[ProductController::class,"show"]);
 Route::post('/create-product/',[ProductController::class,"store"]);
 Route::put('/updated-product/{id}',[ProductController::class,"update"]);
 Route::delete('/removed-product/{id}',[ProductController::class,"destroy"]);
+Route::post('/product/upload/',[ProductController::class,"uploads"]);
+Route::get('/product/image/{filename}',[ProductController::class,"getImage"]);
 
 //*Rutas de ventas de productos
 Route::get('/sales/',[SaleController::class,"index"]);
