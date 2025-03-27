@@ -13,6 +13,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Models\User;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -265,5 +266,50 @@ class UserController extends Controller
         }
 
         return response()->json($data,$data["code"]);
+    }
+
+    public function uploads(Request $request){
+        $image = $request->file("file0");
+
+        $validator = Validator::make($request->all(),[
+            "file0" => "required|image|mimes:jpg,jpeg,png,gif"
+        ]);
+
+        if(!$image || $validator->fails()){
+            $data = array(
+                "status"  => "error",
+                "code"    => 404,
+                "message" => "imagen no encontrada"
+            );
+
+        }else{
+            $image_name = time().$image->getClientOriginalName();
+            Storage::disk('user')->put($image_name,File::get($image));
+
+            $data = array(
+                "status" => "success",
+                "code"   => 200,
+                "image"  => $image_name
+            );
+        }
+        
+        return response()->json($data,$data['code']);
+    }
+
+    public function getImage($filename){
+        $image = Storage::disk('user')->exists($filename);
+
+        if($image){
+            $file = Storage::disk('user')->get($filename);
+            return new Response($file,200);
+        }else{
+            $data = array(
+                "status"  => "error",
+                "code"    => 404,
+                "message" => "Imagen no existe"
+            );
+        }
+
+        return response()->json($data,$data['code']);
     }
 }
