@@ -41,7 +41,7 @@ class ProductController extends Controller
                 );
             }
 
-            $product = Product::find($id);
+            $product = Product::with(['categorie','supplier'])->find($id);
 
             if(is_object($product) && !empty($product) && $product){
                 $data = array(
@@ -79,7 +79,7 @@ class ProductController extends Controller
                 'stock'          => 'required|integer|min:0',
                 'minimum_stock'  => 'required|integer|min:0',
                 'photo'          => 'nullable|string',
-                'status'         => 'required|in:ACTIVE,INACTIVE',
+                //'status'         => 'required|in:ACTIVE,INACTIVE',
                 'brand'          => 'nullable|string|max:255',
                 'categories_id'  => 'required|exists:categories,id',
                 'suppliers_id'   => 'required|exists:suppliers,id',
@@ -90,7 +90,7 @@ class ProductController extends Controller
                 'sale_price.required'     => 'El precio de venta del producto es requerido',
                 'stock.required'          => 'El stock del producto es requerido',
                 'minimum_stock.required'  => 'El stock minimo es requerido',
-                'status.required'         => 'El estado del  producto es requerido',
+                //'status.required'         => 'El estado del  producto es requerido',
                 'categories_id.required'  => 'La categoria del producto es requerido',
                 'suppliers_id.required'   => 'El proveedor de producto es requerido',
             ]);
@@ -143,7 +143,7 @@ class ProductController extends Controller
                 'stock'          => 'required|integer|min:0',
                 'minimum_stock'  => 'required|integer|min:0',
                 'photo'          => 'nullable|string',
-                'status'         => 'required|in:ACTIVE,INACTIVE',
+                //'status'         => 'required|in:ACTIVE,INACTIVE',
                 'brand'          => 'nullable|string|max:255',
                 'categories_id'  => 'required|exists:categories,id',
                 'suppliers_id'   => 'required|exists:suppliers,id',
@@ -154,7 +154,7 @@ class ProductController extends Controller
                 'sale_price.required'     => 'El precio de venta del producto es requerido',
                 'stock.required'          => 'El stock del producto es requerido',
                 'minimum_stock.required'  => 'El stock minimo es requerido',
-                'status.required'         => 'El estado del  producto es requerido',
+                //'status.required'         => 'El estado del  producto es requerido',
                 'categories_id.required'  => 'La categoria del producto es requerido',
                 'suppliers_id.required'   => 'El proveedor de producto es requerido',
             ]);

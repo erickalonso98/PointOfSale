@@ -27,11 +27,11 @@ class Product extends Model
     ];
 
     public function categorie(){
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class,'categories_id');
     }
 
     public function supplier(){
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class,'suppliers_id');
     }
 
     public function saleDetails(){
