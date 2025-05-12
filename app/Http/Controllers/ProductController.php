@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     public function index(){
         $products = Product::all();
-
+      
         if($products->isEmpty()){
             $data = array(
                 "status"  => "error",
@@ -135,7 +135,7 @@ class ProductController extends Controller
             }
 
             $validator = Validator::make($request->all(),[
-                'code'           => 'required|unique:products,code',
+                //'code'           => 'required|unique:products,code',
                 'name'           => 'required|string|max:255',
                 'description'    => 'nullable|string',
                 'purchase_price' => 'required|numeric|min:0',
