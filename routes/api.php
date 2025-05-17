@@ -61,6 +61,7 @@ Route::put('/updated-product/{id}',[ProductController::class,"update"]);
 Route::delete('/removed-product/{id}',[ProductController::class,"destroy"]);
 Route::post('/product/upload/',[ProductController::class,"uploads"]);
 Route::get('/product/image/{filename}',[ProductController::class,"getImage"]);
+Route::get('/product-search-name/',[ProductController::class,"searchByName"]);
 
 //*Rutas de ventas de productos
 Route::get('/sales/',[SaleController::class,"index"]);

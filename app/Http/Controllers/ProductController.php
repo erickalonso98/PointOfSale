@@ -248,6 +248,52 @@ class ProductController extends Controller
         return response()->json($data,$data['code']);
     }
 
+    public function searchByName(Request $request){
+        try {
+
+            $validator = Validator::make($request->all(),[
+                "name" => "required|string"
+            ],[
+                "name.required" => "El nombre es requerido"
+            ]);
+
+            if($validator->fails()){
+                $data = array(
+                    "status"  => 'error',
+                    "code"    => 404,
+                    "message" => $validator->errors()
+                );
+            }
+
+            $name = $request->input('name');
+            
+            if($name && !empty($name)){
+                $products = Product::where('name','like','%'. $name . '%')
+                ->orWhere('code','like','%'.$name. '%')
+                ->get();
+            }else{
+                $products = Product::all();
+            }
+
+            $data = array(
+                "status"  => 'success',
+                "code"    => 200,
+                "products" => $products,
+                "message" => "Productos encontrados con exito!!"
+            );
+
+            
+        } catch (\Exception $e) {
+            $data = array(
+                "status"  => 'error',
+                "code"    => 500,
+                "message" => "Error en el servidor"
+            );
+        }
+
+        return response()->json($data,$data['code']);
+    }
+
     public function uploads(Request $request){
         $image = $request->file('file0');
 
