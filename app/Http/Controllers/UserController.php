@@ -22,12 +22,23 @@ class UserController extends Controller
         $users = User::with("roles")->get();
 
         if($users->isEmpty()){
-            $data = array(
+           $data = array(
                 "status"  => "error",
                 "code"    => 404,
                 "message" => "No se encuentra ningun usuario"
             );
         }else{
+
+
+        $users->transform(function ($user) {
+
+        $user->photo_url = $user->photo
+            ? asset('storage/' . $user->photo)
+            : null;
+
+        return $user;
+    });
+
             $data = array(
                 "status" => "success",
                 "code"   => 200,
@@ -268,47 +279,45 @@ class UserController extends Controller
         return response()->json($data,$data["code"]);
     }
 
-    public function uploads(Request $request){
-        $image = $request->file("file0");
+    public function uploads(Request $request, $id){
 
-        $validator = Validator::make($request->all(),[
-            "file0" => "required|image|mimes:jpg,jpeg,png,gif"
-        ]);
+        $user = User::findOrFail($id);
 
-        if(!$image || $validator->fails()){
-            $data = array(
-                "status"  => "error",
-                "code"    => 404,
-                "message" => "imagen no encontrada"
-            );
-
-        }else{
-            $image_name = time().$image->getClientOriginalName();
-            Storage::disk('user')->put($image_name,File::get($image));
-
-            $data = array(
-                "status" => "success",
-                "code"   => 200,
-                "image"  => $image_name
-            );
+        if($user->photo){
+            Storage::disk('public')->delete($user->photo);
         }
+
+        $request->validate([
+            'photo' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
         
+        $photo = $request->file('photo')->store('user','public');
+
+        $user->photo = $photo;
+        $user->save();
+
+            $data = array(
+                "status"  => "success",
+                "code"    => 200,
+                "message" => "Foto subida con exito",
+                "imagen"  => $user->photo,
+                "url"     => asset('storage/user/' . $user->photo)
+            );
+        
+
         return response()->json($data,$data['code']);
     }
 
-    public function getImage($filename){
-        $image = Storage::disk('user')->exists($filename);
-
-        if($image){
-            $file = Storage::disk('user')->get($filename);
-            return new Response($file,200);
-        }else{
-            $data = array(
-                "status"  => "error",
-                "code"    => 404,
-                "message" => "Imagen no existe"
-            );
-        }
+    public function getImage($id){
+        
+        $user = User::findOrFail($id);
+        
+        $data = array(
+            "status"  => "success",
+            "code"    => 200,
+            "imagen"  => $user->photo,
+            "url"     => asset('storage/user/' . $user->photo)
+        );
 
         return response()->json($data,$data['code']);
     }

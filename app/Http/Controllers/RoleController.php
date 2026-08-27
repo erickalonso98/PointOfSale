@@ -73,7 +73,7 @@ class RoleController extends Controller
     try {
 
         $validator = Validator::make($request->all(),[
-            "name" => "required|string|max:255"
+            "name" => "required|string"
         ],[
             "name.required" => "El nombre del rol es requerido"
         ]);

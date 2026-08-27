@@ -35,8 +35,8 @@ Route::get('/user/{id}',[UserController::class,"show"]);
 Route::post('/user/register/',[UserController::class,"register"]);
 Route::put('/user/update-user/{id}',[UserController::class,"update"]);
 Route::delete('/user/removed-user/{id}',[UserController::class,"destroy"]);
-Route::post('/user/upload/',[UserController::class,"uploads"]);
-Route::get('/user/image/{filename}',[UserController::class,"getImage"]);
+Route::post('/user/upload/{id}',[UserController::class,"uploads"]);
+Route::get('/user/image/{id}',[UserController::class,"getImage"]);
 
 //* Rutas de roles de usuarios
 Route::get('/roles/',[RoleController::class,"index"]);
@@ -61,7 +61,7 @@ Route::put('/updated-product/{id}',[ProductController::class,"update"]);
 Route::delete('/removed-product/{id}',[ProductController::class,"destroy"]);
 Route::post('/product/upload/',[ProductController::class,"uploads"]);
 Route::get('/product/image/{filename}',[ProductController::class,"getImage"]);
-Route::get('/product-search-name/',[ProductController::class,"searchByName"]);
+Route::post('/product-search-name/',[ProductController::class,"searchByName"]);
 
 //*Rutas de ventas de productos
 Route::get('/sales/',[SaleController::class,"index"]);

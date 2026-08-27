@@ -12,7 +12,7 @@ use Illuminate\Http\Response;
 class ProductController extends Controller
 {
     public function index(){
-        $products = Product::all();
+        $products = Product::paginate(10);
       
         if($products->isEmpty()){
             $data = array(
