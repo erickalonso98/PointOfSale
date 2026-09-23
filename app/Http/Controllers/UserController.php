@@ -52,15 +52,9 @@ class UserController extends Controller
     public function show($id){
         try {
 
-            if($id == null){
-                $data = array(
-                    "status"  => "error",
-                    "code"    => 404,
-                    "message" => "Introduzca el id a buscar"
-                );
+            if(isset($id) && $id != null){
+                $user = User::find($id);
             }
-
-            $user = User::find($id);
 
             if(is_object($user) && !empty($user)){
                 $data = array(
@@ -192,7 +186,7 @@ class UserController extends Controller
             $validator = Validator::make($request->all(),[
                 "name"              => "required|string|max:255",
                 "lastname"          => "required|string|max:255",
-                "email"             => "required|email|unique:users",
+                "email"             => "required|email|",
                 "email_verified_at" => "nullable",
                 "password"          => "required|min:7|confirmed",
                 "photo"             => "nullable"
@@ -240,15 +234,9 @@ class UserController extends Controller
     public function destroy($id){
         try {
 
-            if($id == null){
-                $data = array(
-                    "status"  => "error",
-                    "code"    => 404,
-                    "message" => "Introduzca el id a buscar"
-                );
+            if(isset($id) && $id != null){
+                $user = User::find($id);
             }
-
-            $user = User::find($id);
 
             if(is_object($user) && !empty($user)){
 
@@ -271,7 +259,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $data = array(
                 "status"  => "error",
-                "code"    => 404,
+                "code"    => 500,
                 "message" => "Error en el servidor"
             );
         }
@@ -301,7 +289,7 @@ class UserController extends Controller
                 "code"    => 200,
                 "message" => "Foto subida con exito",
                 "imagen"  => $user->photo,
-                "url"     => asset('storage/user/' . $user->photo)
+                "url"     => asset('storage/' . $user->photo)
             );
         
 
@@ -316,7 +304,9 @@ class UserController extends Controller
             "status"  => "success",
             "code"    => 200,
             "imagen"  => $user->photo,
-            "url"     => asset('storage/user/' . $user->photo)
+            "url"     => $user->photo
+            ? asset('storage/' . $user->photo)
+            : null
         );
 
         return response()->json($data,$data['code']);

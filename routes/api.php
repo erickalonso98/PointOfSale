@@ -25,13 +25,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/user/login/',[UserController::class,"login"]);
+
+
 
 Route::middleware('api.auth')->group(function(){
 
 //* Rutas de Usuarios
 Route::get('/users/',[UserController::class,"index"]);
 Route::get('/user/{id}',[UserController::class,"show"]);
+Route::post('/user/login/',[UserController::class,"login"]);
 Route::post('/user/register/',[UserController::class,"register"]);
 Route::put('/user/update-user/{id}',[UserController::class,"update"]);
 Route::delete('/user/removed-user/{id}',[UserController::class,"destroy"]);
